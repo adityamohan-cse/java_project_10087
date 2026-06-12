@@ -350,3 +350,59 @@ public class CourseSystem {
         }
     }
 
+    public static void displayAllCourses() {
+
+        if (courseCount == 0) {
+            System.out.println("No Courses Available!");
+            return;
+        }
+
+        for (int i = 0; i < courseCount; i++) {
+            courses[i].displayCourse();
+        }
+    }
+
+    public static void displayCompleteReport() {
+
+        System.out.println("\n========== COMPLETE REPORT ==========");
+
+        System.out.println("\nTOTAL STUDENTS : " + studentCount);
+        System.out.println("TOTAL COURSES  : " + courseCount);
+
+        System.out.println("\n------ STUDENT DETAILS ------");
+
+        for (int i = 0; i < studentCount; i++) {
+            students[i].display();
+        }
+
+        System.out.println("\n------ COURSE DETAILS ------");
+
+        for (int i = 0; i < courseCount; i++) {
+            courses[i].displayCourse();
+        }
+    }
+
+    public static Student findStudent(String id) {
+
+        for (int i = 0; i < studentCount; i++) {
+
+            if (students[i].getStudentId().equalsIgnoreCase(id)) {
+                return students[i];
+            }
+        }
+
+        return null;
+    }
+
+    public static Course findCourse(String id) {
+
+        for (int i = 0; i < courseCount; i++) {
+
+            if (courses[i].getCourseId().equalsIgnoreCase(id)) {
+                return courses[i];
+            }
+        }
+
+        return null;
+    }
+}
