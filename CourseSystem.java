@@ -1,27 +1,10 @@
+
 import java.util.Scanner;
-
-class Person {
-    protected String name;
-    protected String id;
-
-    public Person(String name, String id) {
-        this.name = name;
-        this.id = id;
-    }
-
-    public void display() {
-        System.out.println("Name : " + name);
-        System.out.println("ID   : " + id);
-    }
-}
 
 class Course {
     private String courseName;
     private String courseId;
     private String duration;
-
-    private Student[] enrolledStudents = new Student[50];
-    private int enrolledCount = 0;
 
     public Course(String courseName, String courseId, String duration) {
         this.courseName = courseName;
@@ -29,76 +12,34 @@ class Course {
         this.duration = duration;
     }
 
-    public String getCourseId() {
-        return courseId;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void addStudent(Student student) {
-        if (enrolledCount < enrolledStudents.length) {
-            enrolledStudents[enrolledCount++] = student;
-        }
-    }
+    public String getCourseName() { return courseName; }
+    public String getCourseId() { return courseId; }
 
     public void displayCourse() {
-        System.out.println("--------------------------------");
         System.out.println("Course Name : " + courseName);
         System.out.println("Course ID   : " + courseId);
         System.out.println("Duration    : " + duration);
-
-        System.out.println("Enrolled Students:");
-
-        if (enrolledCount == 0) {
-            System.out.println("No Students Enrolled");
-        } else {
-            for (int i = 0; i < enrolledCount; i++) {
-                System.out.println((i + 1) + ". "
-                        + enrolledStudents[i].getName()
-                        + " (" + enrolledStudents[i].getStudentId() + ")");
-            }
-        }
     }
 }
 
-class Student extends Person {
-
+class Student {
+    private String studentName;
+    private String studentId;
     private int progress;
 
-    private Course[] courses = new Course[10];
+    private Course[] enrolledCourses = new Course[5];
     private int courseCount = 0;
 
-    public Student(String name, String id) {
-        super(name, id);
-        progress = 0;
+    public Student(String studentName, String studentId) {
+        this.studentName = studentName;
+        this.studentId = studentId;
     }
 
-    public String getStudentId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getProgress() {
-        return progress;
-    }
+    public String getStudentId() { return studentId; }
 
     public void enroll(Course course) {
-
-        for (int i = 0; i < courseCount; i++) {
-            if (courses[i] == course) {
-                System.out.println("Already Enrolled!");
-                return;
-            }
-        }
-
-        if (courseCount < courses.length) {
-            courses[courseCount++] = course;
-            course.addStudent(this);
+        if (courseCount < enrolledCourses.length) {
+            enrolledCourses[courseCount++] = course;
             System.out.println("Enrollment Successful!");
         } else {
             System.out.println("Maximum Course Limit Reached!");
@@ -106,303 +47,166 @@ class Student extends Person {
     }
 
     public void updateProgress(int progress) {
-
         if (progress >= 0 && progress <= 100) {
             this.progress = progress;
-            System.out.println("Progress Updated Successfully!");
-        } else {
-            System.out.println("Progress must be between 0 and 100.");
         }
     }
 
-    public String getStatus() {
-        if (progress >= 100)
-            return "Completed";
-        else
-            return "In Progress";
-    }
-
-    @Override
-    public void display() {
-
-        System.out.println("--------------------------------");
-        System.out.println("Student Name : " + name);
-        System.out.println("Student ID   : " + id);
+    public void displayStudent() {
+        System.out.println("Student Name : " + studentName);
+        System.out.println("Student ID   : " + studentId);
+        System.out.println("Progress     : " + progress + "%");
 
         System.out.println("Enrolled Courses:");
-
         if (courseCount == 0) {
             System.out.println("No Courses Enrolled");
         } else {
             for (int i = 0; i < courseCount; i++) {
-                System.out.println((i + 1) + ". "
-                        + courses[i].getCourseName());
+                System.out.println((i + 1) + ". " + enrolledCourses[i].getCourseName());
             }
         }
-
-        System.out.println("Progress : " + progress + "%");
-        System.out.println("Status   : " + getStatus());
     }
 }
 
 public class CourseSystem {
 
-    static Scanner sc = new Scanner(System.in);
-
-    static Course[] courses = new Course[50];
-    static Student[] students = new Student[50];
-
+    static Course[] courses = new Course[20];
+    static Student[] students = new Student[20];
     static int courseCount = 0;
     static int studentCount = 0;
 
     public static void main(String[] args) {
-
-        int choice = 0;
+        Scanner sc = new Scanner(System.in);
+        int choice;
 
         do {
+            System.out.println("\n===== ONLINE COURSE MANAGEMENT SYSTEM =====");
+            System.out.println("1. Add Course");
+            System.out.println("2. Add Student");
+            System.out.println("3. Enroll Student");
+            System.out.println("4. Update Progress");
+            System.out.println("5. Search Student");
+            System.out.println("6. Search Course");
+            System.out.println("7. Display All Students");
+            System.out.println("8. Display All Courses");
+            System.out.println("9. Display Complete Report");
+            System.out.println("10. Exit");
+            System.out.print("Enter Choice: ");
 
             try {
-
-                System.out.println("\n======================================");
-                System.out.println(" ONLINE COURSE MANAGEMENT SYSTEM ");
-                System.out.println("======================================");
-                System.out.println("1. Add Course");
-                System.out.println("2. Add Student");
-                System.out.println("3. Enroll Student");
-                System.out.println("4. Update Progress");
-                System.out.println("5. Search Student");
-                System.out.println("6. Search Course");
-                System.out.println("7. Display All Students");
-                System.out.println("8. Display All Courses");
-                System.out.println("9. Display Complete Report");
-                System.out.println("10. Exit");
-                System.out.print("Enter Choice: ");
-
                 choice = Integer.parseInt(sc.nextLine());
-
-                switch (choice) {
-
-                    case 1:
-                        addCourse();
-                        break;
-
-                    case 2:
-                        addStudent();
-                        break;
-
-                    case 3:
-                        enrollStudent();
-                        break;
-
-                    case 4:
-                        updateProgress();
-                        break;
-
-                    case 5:
-                        searchStudent();
-                        break;
-
-                    case 6:
-                        searchCourse();
-                        break;
-
-                    case 7:
-                        displayAllStudents();
-                        break;
-
-                    case 8:
-                        displayAllCourses();
-                        break;
-
-                    case 9:
-                        displayCompleteReport();
-                        break;
-
-                    case 10:
-                        System.out.println("Thank You!");
-                        System.out.println("Exiting System...");
-                        break;
-
-                    default:
-                        System.out.println("Invalid Choice!");
-                }
-
             } catch (Exception e) {
-                System.out.println("Invalid Input! Please Try Again.");
+                choice = 0;
+            }
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Course Name: ");
+                    String cname = sc.nextLine();
+                    System.out.print("Course ID: ");
+                    String cid = sc.nextLine();
+                    System.out.print("Duration: ");
+                    String dur = sc.nextLine();
+                    courses[courseCount++] = new Course(cname, cid, dur);
+                    break;
+
+                case 2:
+                    System.out.print("Student Name: ");
+                    String sname = sc.nextLine();
+                    System.out.print("Student ID: ");
+                    String sid = sc.nextLine();
+                    students[studentCount++] = new Student(sname, sid);
+                    break;
+
+                case 3:
+                    System.out.print("Student ID: ");
+                    String esid = sc.nextLine();
+                    System.out.print("Course ID: ");
+                    String ecid = sc.nextLine();
+
+                    Student st = findStudent(esid);
+                    Course co = findCourse(ecid);
+
+                    if (st != null && co != null) st.enroll(co);
+                    else System.out.println("Student/Course Not Found");
+                    break;
+
+                case 4:
+                    System.out.print("Student ID: ");
+                    String psid = sc.nextLine();
+                    Student stu = findStudent(psid);
+
+                    if (stu != null) {
+                        System.out.print("Progress: ");
+                        int p = Integer.parseInt(sc.nextLine());
+                        stu.updateProgress(p);
+                    }
+                    break;
+
+                case 5:
+                    System.out.print("Student ID: ");
+                    String ssid = sc.nextLine();
+                    Student s = findStudent(ssid);
+                    if (s != null) s.displayStudent();
+                    else System.out.println("Student Not Found");
+                    break;
+
+                case 6:
+                    System.out.print("Course ID: ");
+                    String scid = sc.nextLine();
+                    Course c = findCourse(scid);
+                    if (c != null) c.displayCourse();
+                    else System.out.println("Course Not Found");
+                    break;
+
+                case 7:
+                    for (int i = 0; i < studentCount; i++) {
+                        students[i].displayStudent();
+                        System.out.println();
+                    }
+                    break;
+
+                case 8:
+                    for (int i = 0; i < courseCount; i++) {
+                        courses[i].displayCourse();
+                        System.out.println();
+                    }
+                    break;
+
+                case 9:
+                    System.out.println("===== COMPLETE REPORT =====");
+                    for (int i = 0; i < studentCount; i++) {
+                        students[i].displayStudent();
+                        System.out.println("---------------------");
+                    }
+                    break;
+
+                case 10:
+                    System.out.println("Exiting...");
+                    break;
+
+                default:
+                    System.out.println("Invalid Choice");
             }
 
         } while (choice != 10);
+
+        sc.close();
     }
 
-    public static void addCourse() {
-
-        if (courseCount >= courses.length) {
-            System.out.println("Course Storage Full!");
-            return;
-        }
-
-        System.out.print("Enter Course Name : ");
-        String name = sc.nextLine();
-
-        System.out.print("Enter Course ID   : ");
-        String id = sc.nextLine();
-
-        System.out.print("Enter Duration    : ");
-        String duration = sc.nextLine();
-
-        courses[courseCount++] = new Course(name, id, duration);
-
-        System.out.println("Course Added Successfully!");
-    }
-
-    public static void addStudent() {
-
-        if (studentCount >= students.length) {
-            System.out.println("Student Storage Full!");
-            return;
-        }
-
-        System.out.print("Enter Student Name : ");
-        String name = sc.nextLine();
-
-        System.out.print("Enter Student ID   : ");
-        String id = sc.nextLine();
-
-        students[studentCount++] = new Student(name, id);
-
-        System.out.println("Student Added Successfully!");
-    }
-
-    public static void enrollStudent() {
-
-        System.out.print("Enter Student ID : ");
-        String sid = sc.nextLine();
-
-        System.out.print("Enter Course ID  : ");
-        String cid = sc.nextLine();
-
-        Student student = findStudent(sid);
-        Course course = findCourse(cid);
-
-        if (student != null && course != null) {
-            student.enroll(course);
-        } else {
-            System.out.println("Student or Course Not Found!");
-        }
-    }
-
-    public static void updateProgress() {
-
-        System.out.print("Enter Student ID : ");
-        String sid = sc.nextLine();
-
-        Student student = findStudent(sid);
-
-        if (student != null) {
-
-            System.out.print("Enter Progress (0-100): ");
-            int progress = Integer.parseInt(sc.nextLine());
-
-            student.updateProgress(progress);
-
-        } else {
-            System.out.println("Student Not Found!");
-        }
-    }
-
-    public static void searchStudent() {
-
-        System.out.print("Enter Student ID : ");
-        String sid = sc.nextLine();
-
-        Student student = findStudent(sid);
-
-        if (student != null) {
-            student.display();
-        } else {
-            System.out.println("Student Not Found!");
-        }
-    }
-
-    public static void searchCourse() {
-
-        System.out.print("Enter Course ID : ");
-        String cid = sc.nextLine();
-
-        Course course = findCourse(cid);
-
-        if (course != null) {
-            course.displayCourse();
-        } else {
-            System.out.println("Course Not Found!");
-        }
-    }
-
-    public static void displayAllStudents() {
-
-        if (studentCount == 0) {
-            System.out.println("No Students Available!");
-            return;
-        }
-
+    static Student findStudent(String id) {
         for (int i = 0; i < studentCount; i++) {
-            students[i].display();
-        }
-    }
-
-    public static void displayAllCourses() {
-
-        if (courseCount == 0) {
-            System.out.println("No Courses Available!");
-            return;
-        }
-
-        for (int i = 0; i < courseCount; i++) {
-            courses[i].displayCourse();
-        }
-    }
-
-    public static void displayCompleteReport() {
-
-        System.out.println("\n========== COMPLETE REPORT ==========");
-
-        System.out.println("\nTOTAL STUDENTS : " + studentCount);
-        System.out.println("TOTAL COURSES  : " + courseCount);
-
-        System.out.println("\n------ STUDENT DETAILS ------");
-
-        for (int i = 0; i < studentCount; i++) {
-            students[i].display();
-        }
-
-        System.out.println("\n------ COURSE DETAILS ------");
-
-        for (int i = 0; i < courseCount; i++) {
-            courses[i].displayCourse();
-        }
-    }
-
-    public static Student findStudent(String id) {
-
-        for (int i = 0; i < studentCount; i++) {
-
-            if (students[i].getStudentId().equalsIgnoreCase(id)) {
+            if (students[i].getStudentId().equalsIgnoreCase(id))
                 return students[i];
-            }
         }
-
         return null;
     }
 
-    public static Course findCourse(String id) {
-
+    static Course findCourse(String id) {
         for (int i = 0; i < courseCount; i++) {
-
-            if (courses[i].getCourseId().equalsIgnoreCase(id)) {
+            if (courses[i].getCourseId().equalsIgnoreCase(id))
                 return courses[i];
-            }
         }
-
         return null;
     }
 }
